@@ -1,0 +1,6 @@
+.DS_Store
+.turbo
+.idea
+node_modules
+.output
+dist

@@ -1,0 +1,18 @@
+{
+  "name": "@repo/shared",
+  "version": "1.0.0",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "@nuxt/kit": "^3.15.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@vueuse/core": "^14.1.0",
+    "@vueuse/nuxt": "^14.1.0"
+  }
+}
