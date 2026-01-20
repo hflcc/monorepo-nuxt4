@@ -1,16 +1,33 @@
 import { fileURLToPath } from "node:url";
+import { customRoutes } from "./app/router.config";
 
-// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   extends: ["../../packages/shared"],
 
   alias: {
-    // @和~代表当前项目，~~代表monorepo根项目
     "@": fileURLToPath(new URL("./", import.meta.url)),
     "~": fileURLToPath(new URL("./", import.meta.url)),
     "~~": fileURLToPath(new URL("../../", import.meta.url)),
   },
 
-  // 这里的配置大部分已被 shared/modules/base 处理
-  // 只需要保留应用特定的配置
+  // 使用 hooks 注入路由，这样 i18n 模块可以检测到并处理它们
+  hooks: {
+    "pages:extend"(pages) {
+      pages.splice(0, pages.length);
+      pages.push(...customRoutes);
+    },
+  },
+
+  i18n: {
+    // 必须再次声明策略，确保应用层路由生成逻辑正确
+    strategy: "prefix_except_default",
+    detectBrowserLanguage: false,
+    langDir: fileURLToPath(new URL("./locales", import.meta.url)),
+    locales: [
+      { code: "en", file: "en/index.json" },
+      { code: "jp", file: "jp/index.json" },
+      { code: "kr", file: "kr/index.json" },
+      { code: "de", file: "de/index.json" },
+    ],
+  },
 });

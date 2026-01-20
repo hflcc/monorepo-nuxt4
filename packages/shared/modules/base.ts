@@ -12,6 +12,7 @@ export default defineNuxtModule({
     "@nuxtjs/tailwindcss": {},
     "@element-plus/nuxt": {},
     "@vueuse/nuxt": {},
+    "@nuxtjs/i18n": {},
   },
   setup(options, nuxt) {
     // 1. 统一设置核心配置

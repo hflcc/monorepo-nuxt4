@@ -12,6 +12,7 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
+    "@nuxtjs/i18n": "^10.2.1",
     "@vueuse/core": "^14.1.0",
     "@vueuse/nuxt": "^14.1.0"
   }

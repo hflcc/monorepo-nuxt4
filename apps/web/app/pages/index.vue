@@ -7,6 +7,7 @@ import type { WebSpecificData } from '@/types'
 const counter = useCounterStore()
 const auth = useSharedAuthStore()
 const helloMessage = sayHello('World')
+const localePath = useLocalePath()
 
 const pageData: WebSpecificData = {
   webTitle: 'Web Main Page',
@@ -18,10 +19,10 @@ const pageData: WebSpecificData = {
 <template>
   <div class="min-h-screen bg-gray-100 p-8">
     <div class="max-w-2xl mx-auto bg-white rounded-xl shadow-md p-6">
-      <h1 class="text-3xl font-bold text-blue-600 mb-4">{{ APP_NAME }} app</h1>
+      <h1 class="text-3xl font-bold text-blue-600 mb-4">{{ $t('i18n_web_name') }}</h1>
       
       <div class="mb-6 p-4 bg-blue-50 rounded-lg">
-        <h2 class="font-bold mb-2">Shared Auth Store:</h2>
+        <h2 class="font-bold mb-2">{{ $t('i18n_shared_welcome') }}:</h2>
         <div v-if="auth.isLoggedIn">
           <p>Welcome, {{ auth.user?.name }} ({{ auth.user?.role }})</p>
           <el-button size="small" @click="auth.logout">Logout</el-button>
@@ -54,7 +55,7 @@ const pageData: WebSpecificData = {
         </div>
         
         <div class="mt-4 pt-4 border-t">
-          <NuxtLink to="/about" class="text-blue-500 hover:underline">Go to About Page</NuxtLink>
+          <NuxtLink :to="localePath('/about')" class="text-blue-500 hover:underline">{{ $t('i18n_web_go_about') }}</NuxtLink>
         </div>
       </div>
     </div>

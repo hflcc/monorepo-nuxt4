@@ -1,0 +1,8 @@
+{
+  "i18n_web_name": "Web Application 1",
+  "i18n_web_description": "Specific content for Web 1 (EN)",
+  "i18n_web_about_title": "About Page",
+  "i18n_web_about_description": "This is the about page for the Web app.",
+  "i18n_web_back_home": "Back to Home",
+  "i18n_web_go_about": "Go to About Page"
+}

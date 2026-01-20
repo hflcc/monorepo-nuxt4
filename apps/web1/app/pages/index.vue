@@ -7,6 +7,7 @@ import type { Web1SpecificData } from '@/types'
 const counter = useCounterStore()
 const auth = useSharedAuthStore()
 const helloMessage = sayHello('Web1 User')
+const localePath = useLocalePath()
 
 const pageData: Web1SpecificData = {
   web1Version: '1.0.0',
@@ -18,10 +19,10 @@ const pageData: Web1SpecificData = {
 <template>
   <div class="min-h-screen bg-green-50 p-8">
     <div class="max-w-2xl mx-auto bg-white rounded-xl shadow-md p-6">
-      <h1 class="text-3xl font-bold text-green-600 mb-4">{{ APP_NAME }} - Web1 Project</h1>
+      <h1 class="text-3xl font-bold text-green-600 mb-4">{{ $t('i18n_web1_name') }}</h1>
 
       <div class="mb-6 p-4 bg-green-100 rounded-lg">
-        <h2 class="font-bold mb-2">Shared Auth Store (Web1):</h2>
+        <h2 class="font-bold mb-2">{{ $t('i18n_shared_welcome') }}:</h2>
         <div v-if="auth.isLoggedIn">
           <p>User: {{ auth.user?.name }}</p>
           <el-button size="small" @click="auth.logout">Logout</el-button>
@@ -52,7 +53,7 @@ const pageData: Web1SpecificData = {
         </div>
 
         <div class="mt-4 pt-4 border-t">
-          <NuxtLink to="/about" class="text-green-500 hover:underline">Go to About Page (Web1)</NuxtLink>
+          <NuxtLink :to="localePath('/about')" class="text-green-500 hover:underline">{{ $t('i18n_web1_go_about') }}</NuxtLink>
         </div>
       </div>
     </div>
