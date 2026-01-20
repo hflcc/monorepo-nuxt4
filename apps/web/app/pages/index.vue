@@ -44,7 +44,7 @@ const pageData: WebSpecificData = {
         <div class="pt-6 border-t">
           <h2 class="text-xl font-semibold mb-3">Element Plus Components</h2>
           <div class="flex space-x-2">
-            <el-tag>Nuxt 3</el-tag>
+            <el-tag>Nuxt 4</el-tag>
             <el-tag type="success">Vue 3</el-tag>
             <el-tag type="info">TypeScript</el-tag>
             <el-tag type="warning">Tailwind</el-tag>

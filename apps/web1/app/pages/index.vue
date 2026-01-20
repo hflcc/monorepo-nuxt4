@@ -44,7 +44,7 @@ const pageData: Web1SpecificData = {
           <h2 class="text-xl font-semibold mb-3">Element Plus Components in Web1</h2>
           <div class="flex space-x-2">
             <el-tag type="success">Web1 App</el-tag>
-            <el-tag>Nuxt 3</el-tag>
+            <el-tag>Nuxt 4</el-tag>
             <el-tag type="info">Shared Lib</el-tag>
           </div>
           <div class="mt-4">
