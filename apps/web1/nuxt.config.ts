@@ -18,8 +18,6 @@ export default defineNuxtConfig({
   },
 
   i18n: {
-    strategy: "prefix_except_default",
-    detectBrowserLanguage: false,
     langDir: fileURLToPath(new URL("./locales", import.meta.url)),
     locales: [
       { code: "en", file: "en/index.json" },

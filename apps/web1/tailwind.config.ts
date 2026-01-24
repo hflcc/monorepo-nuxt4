@@ -6,7 +6,8 @@ export default <Partial<Config>>{
     './pages/**/*.{vue,js,ts}',
     './components/**/*.{vue,js,ts}',
     './layouts/**/*.{vue,js,ts}',
-    './plugins/**/*.{js,ts}'
+    './plugins/**/*.{js,ts}',
+    '../../packages/shared/**/*.{vue,js,ts}'
   ],
   theme: {
     extend: {},

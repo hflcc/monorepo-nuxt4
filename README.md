@@ -43,10 +43,16 @@
 
 ### 2. 代码共享策略
 - **布局/组件**: 放在 `packages/shared/layouts` 或组件目录中，子应用可直接使用或重写。
+- **样式开发**: `packages/shared` 中的组件现在完全支持 Tailwind CSS。只需按常规方式编写 Tailwind 类名，所有引用该组件的应用在构建时都会自动扫描并生成对应样式，无需额外配置。
 - **状态管理**: 公共状态（如用户信息、授权）放在 `packages/shared/stores`。
 - **中间件/插件**: 通用的拦截逻辑和插件放在 `packages/shared/server` 或 `plugins`。
 
-### 3. 别名约定
+### 3. 国际化 (i18n) 策略
+- **通用配置**: 路由策略（`strategy`）、默认语言等核心配置统一在 `packages/shared/i18n-config.ts` 中管理，修改一处即可影响所有应用。
+- **语言包**: 各个应用只需在 `nuxt.config.ts` 中定义自己的 `locales` 列表和语言文件路径。
+- **扩展性**: 如果应用需要覆盖通用策略（例如想用不同的路由模式），可以直接在应用的 `i18n` 配置中重写相关字段。
+
+### 4. 别名约定
 - `@` 或 `~`: 指向**当前应用**的根目录。
 - `~~`: 指向整个 **Monorepo** 的根目录，方便跨包引用。
 
@@ -62,7 +68,8 @@
 ## ⚠️ 注意事项
 
 1.  **依赖安装**: 请务必在根目录下执行 `pnpm install`。若需给特定应用安装依赖，建议进入该目录执行或使用 `pnpm add <pkg> --filter <app-name>`。
-2.  **类型生成**: 首次运行或修改共享层后，若遇到类型错误，请确保在子应用中运行了 `pnpm postinstall` 或启动过 `pnpm dev` 以生成 `.nuxt` 类型文件。
+2.  **Shared 包开发**: 修改 `packages/shared` 时，请注意 `package.json` 中的 `peerDependencies`。Shared 包作为 Nuxt Layer，应声明对 `vue` 和 `nuxt` 的对等依赖，以确保与宿主应用版本兼容。
+3.  **类型生成**: 首次运行或修改共享层后，若遇到类型错误，请确保在子应用中运行了 `pnpm postinstall` 或启动过 `pnpm dev` 以生成 `.nuxt` 类型文件。
 3.  **配置冲突**: 子应用的 `nuxt.config.ts` 会覆盖 `packages/shared` 中的同名配置。如果某个配置不生效，请检查是否存在冲突。
 4.  **环境隔离**: 虽然是 Monorepo，但每个应用在 `apps/` 下应保持相对独立的 `env` 配置，避免环境污染。
 

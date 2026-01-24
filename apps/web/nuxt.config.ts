@@ -19,9 +19,6 @@ export default defineNuxtConfig({
   },
 
   i18n: {
-    // 必须再次声明策略，确保应用层路由生成逻辑正确
-    strategy: "prefix_except_default",
-    detectBrowserLanguage: false,
     langDir: fileURLToPath(new URL("./locales", import.meta.url)),
     locales: [
       { code: "en", file: "en/index.json" },
