@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useCounterStore } from '@/stores/counter'
-import { useSharedAuthStore } from '@repo/shared/stores/auth' // 或者直接使用，因为有 auto-import
-import { APP_NAME, sayHello } from '@repo/shared'
+import { useSharedAuthStore } from '@repo/core/stores/auth' 
+import { APP_NAME, sayHello } from '@repo/utils'
 import type { WebSpecificData } from '@/types'
 
 const counter = useCounterStore()

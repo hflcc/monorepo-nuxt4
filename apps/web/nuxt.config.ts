@@ -1,8 +1,10 @@
 import { fileURLToPath } from "node:url";
-import { customRoutes } from "./app/router.config";
+// import { customRoutes } from "./app/router.config";
+
+const uiLayer = fileURLToPath(new URL("../../packages/ui", import.meta.url));
 
 export default defineNuxtConfig({
-  extends: ["../../packages/shared"],
+  extends: [uiLayer],
 
   alias: {
     "@": fileURLToPath(new URL("./", import.meta.url)),
@@ -10,13 +12,12 @@ export default defineNuxtConfig({
     "~~": fileURLToPath(new URL("../../", import.meta.url)),
   },
 
-  // 使用 hooks 注入路由，这样 i18n 模块可以检测到并处理它们
-  hooks: {
-    "pages:extend"(pages) {
-      pages.splice(0, pages.length);
-      pages.push(...customRoutes);
-    },
-  },
+  // hooks: {
+  //   "pages:extend"(pages) {
+  //     pages.splice(0, pages.length);
+  //     pages.push(...customRoutes);
+  //   },
+  // },
 
   i18n: {
     langDir: fileURLToPath(new URL("./locales", import.meta.url)),

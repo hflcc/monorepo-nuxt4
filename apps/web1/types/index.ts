@@ -1,4 +1,4 @@
-import type { User } from '@repo/shared'
+import type { User } from '@repo/utils'
 
 // Web1 应用特有的类型
 export interface Web1SpecificData {

@@ -19,12 +19,17 @@
 │   ├── web/                # 应用 1 (Nuxt 4)
 │   └── web1/               # 应用 2 (Nuxt 4)
 ├── packages/               # 共享包目录
-│   └── shared/             # 核心共享层 (Nuxt Layer)
-│       ├── layouts/        # 共享布局
-│       ├── modules/        # 共享 Nuxt 模块
-│       ├── plugins/        # 共享插件
-│       ├── server/         # 共享服务器中间件/路由
-│       ├── stores/         # 共享 Pinia 仓库
+│   ├── core/               # 核心逻辑层 (Nuxt Layer)
+│   │   ├── modules/        # 共享 Nuxt 模块
+│   │   ├── plugins/        # 共享插件
+│   │   ├── server/         # 共享服务器中间件/路由
+│   │   ├── stores/         # 共享 Pinia 仓库
+│   │   └── i18n/           # 国际化核心配置
+│   ├── ui/                 # UI 组件层 (Nuxt Layer)
+│   │   ├── layouts/        # 共享布局
+│   │   └── components/     # (计划中) 共享 UI 组件
+│   └── utils/              # 工具库 (Pure TypeScript)
+│       ├── src/            # 通用工具函数
 │       └── types/          # 全局类型定义
 ├── package.json            # 根项目配置
 ├── pnpm-workspace.yaml     # pnpm 工作区配置
@@ -34,27 +39,35 @@
 
 ## 🚀 开发范式 (Development Paradigm)
 
-### 1. Nuxt Layers 继承机制
-本项目利用 Nuxt 4 的 `extends` 特性。`packages/shared` 作为一个基础层，包含了所有应用通用的配置、模块和 UI 逻辑。
+### 1. 分层架构 (Layered Architecture)
+本项目采用清晰的三层架构设计，实现了关注点分离：
 
-- **应用层 (`apps/*`)**: 只需关注应用特定的业务逻辑。在 `nuxt.config.ts` 中通过 `extends: ["../../packages/shared"]` 继承共享层。
-- **共享层 (`packages/shared`)**: 存放跨应用共享的代码。修改此处的代码会自动应用到所有继承它的应用中。
-- **自动模块注入**: `packages/shared/modules/base.ts` 会自动为所有应用注入核心依赖（Pinia, Tailwind CSS, Element Plus, VueUse），开发者无需在子应用中重复安装。
+- **Utils 层 (`packages/utils`)**: 最底层的纯 TypeScript 库，不依赖 Vue/Nuxt。提供通用的工具函数和类型定义。
+- **Core 层 (`packages/core`)**: 核心业务逻辑层 (Nuxt Layer)。包含状态管理 (Pinia)、插件、服务端中间件、模块配置 (Base Module) 和 i18n 基础配置。
+- **UI 层 (`packages/ui`)**: 视觉表现层 (Nuxt Layer)。继承自 Core 层，提供布局 (Layouts)、UI 组件和样式配置。
+- **应用层 (`apps/*`)**: 具体的业务应用。继承自 UI 层，只需关注该应用特有的页面和逻辑。
 
-### 2. 代码共享策略
-- **布局/组件**: 放在 `packages/shared/layouts` 或组件目录中，子应用可直接使用或重写。
-- **样式开发**: `packages/shared` 中的组件现在完全支持 Tailwind CSS。只需按常规方式编写 Tailwind 类名，所有引用该组件的应用在构建时都会自动扫描并生成对应样式，无需额外配置。
-- **状态管理**: 公共状态（如用户信息、授权）放在 `packages/shared/stores`。
-- **中间件/插件**: 通用的拦截逻辑和插件放在 `packages/shared/server` 或 `plugins`。
+### 2. Nuxt Layers 继承机制
+通过 Nuxt 4 的 `extends` 特性实现层级继承：
+`App` -> `UI Layer` -> `Core Layer`
 
-### 3. 国际化 (i18n) 策略
-- **通用配置**: 路由策略（`strategy`）、默认语言等核心配置统一在 `packages/shared/i18n-config.ts` 中管理，修改一处即可影响所有应用。
+- **自动模块注入**: `packages/core/modules/base.ts` 会自动为所有应用注入核心依赖（Pinia, Tailwind CSS, Element Plus, VueUse）。
+- **配置继承**: 子应用自动继承上层配置，并可在 `nuxt.config.ts` 中进行覆盖。
+
+### 3. 代码共享策略
+- **工具/类型**: 放在 `packages/utils`，通过 `@repo/utils` 引入。
+- **业务逻辑**: 通用 Store、Plugins、Server Middleware 放在 `packages/core`。
+- **UI/布局**: 通用 Layouts 和 Components 放在 `packages/ui`。
+- **样式开发**: `packages/ui` 和 `packages/core` 中的组件完全支持 Tailwind CSS。
+
+### 4. 国际化 (i18n) 策略
+- **通用配置**: 路由策略（`strategy`）、默认语言等核心配置统一在 `packages/core` 中管理。
 - **语言包**: 各个应用只需在 `nuxt.config.ts` 中定义自己的 `locales` 列表和语言文件路径。
-- **扩展性**: 如果应用需要覆盖通用策略（例如想用不同的路由模式），可以直接在应用的 `i18n` 配置中重写相关字段。
 
-### 4. 别名约定
+### 5. 别名约定
 - `@` 或 `~`: 指向**当前应用**的根目录。
-- `~~`: 指向整个 **Monorepo** 的根目录，方便跨包引用。
+- `~~`: 指向整个 **Monorepo** 的根目录。
+- `@repo/utils`: 引用工具包。
 
 ## ⌨️ 常用命令
 
@@ -67,14 +80,14 @@
 
 ## ⚠️ 注意事项
 
-1.  **依赖安装**: 请务必在根目录下执行 `pnpm install`。若需给特定应用安装依赖，建议进入该目录执行或使用 `pnpm add <pkg> --filter <app-name>`。
-2.  **Shared 包开发**: 修改 `packages/shared` 时，请注意 `package.json` 中的 `peerDependencies`。Shared 包作为 Nuxt Layer，应声明对 `vue` 和 `nuxt` 的对等依赖，以确保与宿主应用版本兼容。
+1.  **依赖安装**: 请务必在根目录下执行 `pnpm install`。若需给特定应用安装依赖，建议使用 `pnpm add <pkg> --filter <app-name>`。
+2.  **Layer 开发**: 修改 `packages/core` 或 `packages/ui` 时，请注意 `package.json` 中的依赖关系。UI 层依赖 Core 层，应用层依赖 UI 层。
 3.  **类型生成**: 首次运行或修改共享层后，若遇到类型错误，请确保在子应用中运行了 `pnpm postinstall` 或启动过 `pnpm dev` 以生成 `.nuxt` 类型文件。
-3.  **配置冲突**: 子应用的 `nuxt.config.ts` 会覆盖 `packages/shared` 中的同名配置。如果某个配置不生效，请检查是否存在冲突。
-4.  **环境隔离**: 虽然是 Monorepo，但每个应用在 `apps/` 下应保持相对独立的 `env` 配置，避免环境污染。
+4.  **配置冲突**: 子应用的 `nuxt.config.ts` 会覆盖上层 Layer 中的同名配置。
 
 ## 🤝 协作建议
 
-- 新增通用功能时，优先考虑在 `packages/shared` 中实现。
-- 保持 `packages/shared` 的纯粹性，避免引入仅针对单一应用的特殊逻辑。
-- 在修改共享包后，建议使用 `pnpm lint` 确保不会破坏其他应用的构建。
+- **纯函数/类型**: 优先放入 `packages/utils`。
+- **通用业务逻辑**: 放入 `packages/core`。
+- **通用 UI 组件**: 放入 `packages/ui`。
+- **特定业务**: 仅在 `apps/` 下对应的应用中实现。

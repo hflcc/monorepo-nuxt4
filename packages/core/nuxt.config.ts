@@ -6,6 +6,10 @@ export default defineNuxtConfig({
   // 引入公共模块
   modules: [
     fileURLToPath(new URL("./modules/base", import.meta.url)),
+    "@pinia/nuxt",
+    "@nuxtjs/tailwindcss",
+    "@element-plus/nuxt",
+    "@vueuse/nuxt",
     "@nuxtjs/i18n",
   ],
 
