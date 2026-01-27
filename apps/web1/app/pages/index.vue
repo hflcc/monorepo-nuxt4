@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useCounterStore } from '@/app/stores/counter'
+import { useCounterStore } from '@/stores/counter'
 // import { useSharedAuthStore } from '@repo/shared/stores/auth' // Auto-imported from @repo/core
 import { useSharedAuthStore } from '@repo/core/stores/auth' 
 import { APP_NAME, sayHello } from '@repo/utils'
