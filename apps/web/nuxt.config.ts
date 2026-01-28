@@ -1,9 +1,12 @@
 import { fileURLToPath } from "node:url";
+import { resolveAppRuntimeConfig, type AppEnv } from "../../config/app-env";
 // import { customRoutes } from "./app/router.config";
 
 const uiLayer = fileURLToPath(new URL("../../packages/ui", import.meta.url));
 const appDir = fileURLToPath(new URL("./app", import.meta.url));
 const workspaceRoot = fileURLToPath(new URL("../../", import.meta.url));
+const appEnv = (process.env.APP_ENV ?? "local") as AppEnv;
+const appRuntime = resolveAppRuntimeConfig(appEnv, "web");
 
 export default defineNuxtConfig({
   extends: [uiLayer],
@@ -28,5 +31,11 @@ export default defineNuxtConfig({
       { code: "kr", file: "kr/index.json" },
       { code: "de", file: "de/index.json" },
     ],
+  },
+  runtimeConfig: {
+    public: {
+      apiBase: appRuntime.apiBase,
+      appName: appRuntime.appName,
+    },
   },
 });

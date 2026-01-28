@@ -7,7 +7,12 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "dev:local": "APP_ENV=local nuxt dev",
+    "build:local": "APP_ENV=local nuxt build",
+    "build:fat": "APP_ENV=fat nuxt build",
+    "build:uat": "APP_ENV=uat nuxt build",
+    "build:prod": "APP_ENV=prod nuxt build"
   },
   "dependencies": {
     "@element-plus/nuxt": "^1.1.4",

@@ -1,6 +1,9 @@
 import { defineNuxtConfig } from "nuxt/config";
 import { fileURLToPath } from "node:url";
+import { type AppEnv } from "../../config/app-env";
 import { i18nConfig } from "./i18n-config";
+
+const appEnv = (process.env.APP_ENV ?? "local") as AppEnv;
 
 export default defineNuxtConfig({
   // 引入公共模块
@@ -14,4 +17,10 @@ export default defineNuxtConfig({
   ],
 
   i18n: i18nConfig,
+
+  runtimeConfig: {
+    public: {
+      appEnv,
+    },
+  },
 });
