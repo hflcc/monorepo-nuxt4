@@ -5,4 +5,5 @@ const coreLayer = fileURLToPath(new URL("../core", import.meta.url));
 
 export default defineNuxtConfig({
   extends: [coreLayer],
+  css: ["~/assets/css/base.css"],
 });

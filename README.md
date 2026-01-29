@@ -17,7 +17,9 @@
 .
 ├── apps/                   # 应用目录
 │   ├── web/                # 应用 1 (Nuxt 4)
+│   │   └── tailwind.config.ts # web Tailwind 配置
 │   └── web1/               # 应用 2 (Nuxt 4)
+│       └── tailwind.config.ts # web1 Tailwind 配置
 ├── packages/               # 共享包目录
 │   ├── core/               # 核心逻辑层 (Nuxt Layer)
 │   │   ├── modules/        # 共享 Nuxt 模块
@@ -27,10 +29,15 @@
 │   │   ├── locales/        # 共享语言包
 │   │   └── i18n-config.ts  # i18n 核心配置
 │   ├── ui/                 # UI 层 (Nuxt Layer)
+│   │   ├── assets/          # 共享样式资源
+│   │   │   └── css/         # 全局基础样式
+│   │   │       └── base.css # Tailwind 基础与公共样式
 │   │   └── layouts/        # 共享布局
 │   └── utils/              # 工具库 (Pure TypeScript)
 │       ├── src/            # 通用工具函数
 │       └── types/          # 全局类型定义
+├── config/                 # 项目级配置
+│   └── app-env.ts           # 多环境与应用运行时配置
 ├── package.json            # 根项目配置
 ├── pnpm-workspace.yaml     # pnpm 工作区配置
 ├── turbo.json              # Turborepo 任务流配置
@@ -59,7 +66,7 @@
 - **工具/类型**: 放在 `packages/utils`，通过 `@repo/utils` 引入。
 - **业务逻辑**: 通用 Store、Plugins、Server Middleware 放在 `packages/core`。
 - **UI/布局**: 通用 Layouts 与共享 UI 放在 `packages/ui`。
-- **样式开发**: `packages/ui` 和 `packages/core` 中的组件完全支持 Tailwind CSS。
+- **样式开发**: `packages/ui/assets/css/base.css` 统一基础样式入口；各应用在 `apps/*/tailwind.config.ts` 维护 Tailwind 配置。
 
 ### 4. 国际化 (i18n) 策略
 - **通用配置**: `packages/core/i18n-config.ts` 维护默认语言、策略等核心配置。
@@ -69,6 +76,26 @@
 - `@` 或 `~`: 指向**当前应用**的根目录。
 - `~~`: 指向整个 **Monorepo** 的根目录。
 - `@repo/core` / `@repo/ui` / `@repo/utils`: 引用共享层。
+
+### 6. 多环境运行时配置
+- **环境变量**: 通过 `APP_ENV` 指定运行环境（`local` / `fat` / `uat` / `prod`）。
+- **配置入口**: `config/app-env.ts` 统一维护多环境与应用级配置。
+- **应用注入**: `apps/web` 与 `apps/web1` 在 `runtimeConfig.public` 中注入 `apiBase` 与 `appName`，并通过 `resolveAppRuntimeConfig` 解析。
+
+## 📱 响应式样式说明
+
+本项目使用 Tailwind CSS 的 `screens` 断点，按以下范围定义：
+
+| 断点 | 范围 |
+| :--- | :--- |
+| `sm` | `max: 767px` |
+| `md` | `min: 768px` 且 `max: 1199px` |
+| `lg` | `min: 1200px` |
+
+示例：
+- `sm:text-sm`：仅在 0–767px 生效。
+- `md:grid-cols-2`：仅在 768–1199px 生效。
+- `lg:px-10`：仅在 1200px 及以上生效。
 
 ## ⌨️ 常用命令
 
@@ -80,6 +107,16 @@
 | `pnpm lint` | 运行 lint 检查 |
 | `pnpm dev --filter web` | 仅启动 web 应用 |
 | `pnpm dev --filter web1` | 仅启动 web1 应用 |
+| `pnpm dev:local --filter web` | 以 local 环境启动 web |
+| `pnpm build:local --filter web` | 以 local 环境构建 web |
+| `pnpm build:fat --filter web` | 以 fat 环境构建 web |
+| `pnpm build:uat --filter web` | 以 uat 环境构建 web |
+| `pnpm build:prod --filter web` | 以 prod 环境构建 web |
+| `pnpm dev:local --filter web1` | 以 local 环境启动 web1 |
+| `pnpm build:local --filter web1` | 以 local 环境构建 web1 |
+| `pnpm build:fat --filter web1` | 以 fat 环境构建 web1 |
+| `pnpm build:uat --filter web1` | 以 uat 环境构建 web1 |
+| `pnpm build:prod --filter web1` | 以 prod 环境构建 web1 |
 
 ## ⚠️ 注意事项
 
